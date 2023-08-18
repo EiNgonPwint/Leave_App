@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout.html :: html_head"/>
+
+<body>
+  <div th:replace="fragments/layout.html :: menu"/>
+  <div th:replace="fragments/layout.html :: header"/> 
+  <h3 th:utext="#{title.OtApproval}">Overtime Details for Approval</h3>
+
+  <table>
+    <tr>
+      <th align="right"><span th:text="#{fieldLabel.otId}">Overtime
+          ID</span></th>
+      <td colspan="3" th:text="${over.otId}">Id</td>
+    </tr>
+   
+    <tr>
+      <th align="right"><span th:text="#{fieldLabel.date}">
+          Date</span></th>
+      <td th:text="${#temporals.format(over.otDate, 'dd-MM-yyyy')}">
+         Date</td>
+    </tr>
+    <tr>
+      <th align="right"><span th:text="#{fieldLabel.hour}">End
+          Hour</span></th>
+      <td th:text="${over.otHour}">Hour</td>
+    </tr>
+    <tr>
+      <th align="right"><span th:text="#{fieldLabel.reason}">Reason</span>
+      </th>
+      <td colspan="3" th:text="${over.reason}">Reason</td>
+    </tr>
+    <tr>
+      <th align="right"><span th:text="#{fieldLabel.status}">Status</span>
+      </th>
+      <td colspan="3" th:text="${over.status}">Status</td>
+    </tr>
+  </table>
+
+
+  <form action="#" th:action="@{/manager/ot/edit/}+${over.otId}" th:object="${approve}" method="post">
+    <table>
+      <tr>
+        <td>
+          <fieldset>
+            <input type="radio" th:field="*{decision}" th:value="APPROVED" />
+            <label th:text="#{caption.approve}"></label> &nbsp;&nbsp; <input type="radio"
+              th:field="*{decision}" th:value="REJECTED" /> <label th:text="#{caption.reject}"></label>
+          </fieldset>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <fieldset>
+            <input th:type="submit" th:value="Update" class="blcass" />
+          </fieldset>
+        </td>
+
+      </tr>
+    </table>
+
+  </form>
+</body>
+
+</html>

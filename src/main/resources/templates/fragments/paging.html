@@ -1,0 +1,6 @@
+<a style="text-decoration: none"  th:fragment="paging(pageNum, label, tooltip)" class="page-link"
+  th:href="@{'/staff/leave/history?' + 'page=' + ${pageNum} + '&size=' + ${pageSize}
+                           + ${sortField!=null ? '&sort=' + sortField + ',' + sortDirection : ''}}"
+  th:title="${tooltip}" rel="tooltip">
+  [[${label}]]
+</a>

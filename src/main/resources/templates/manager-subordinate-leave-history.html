@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout.html :: html_head"/>
+<body>
+  <div th:replace="fragments/layout.html :: menu"/>
+  <div th:replace="fragments/layout.html :: header"/> 
+  <h2>Subordinates Leave History Page</h2>
+
+  <div th:if="${not #lists.isEmpty(submap)}">
+    <table>
+      <tr class="listRecord" th:each="subordinate, stat : ${submap} ">
+        <td>
+          <div th:if="${not #lists.isEmpty(subordinate.value)}">
+            <h3 th:text="${subordinate.key.name}+' Leave History'">
+                Leave History</h3>
+            <table style=" border: 1;">
+              <tr class="listHeading">
+                <th th:utext="#{fieldLabel.reference}">Reference</th>
+                <th th:utext="#{fieldLabel.leaveType}">Leave Type</th>
+                <th th:utext="#{fieldLabel.startDate}">Start</th>
+                <th th:utext="#{fieldLabel.endDate}">End</th>
+                <th th:utext="#{fieldLabel.status}">Status</th>
+              </tr>
+              <tr class="listRecord" th:each="leave : ${subordinate.value}">
+                <td th:text="${leave.leaveId}"></td>
+                <td th:text="${leave.leaveType.name}"></td>
+                <td th:text="${leave.fromDate}"></td>
+                <td th:text="${leave.toDate}"></td>
+                <td th:text="${leave.status}"></td>
+              </tr>
+            </table>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout.html :: html_head"/>
+
+<body>
+  <div th:replace="fragments/layout.html :: menu"/>
+  <div th:replace="fragments/layout.html :: header"/> 
+  <h3 th:utext="#{title.leavePending}">Leave History</h3>
+  
+  <div th:if="${not #lists.isEmpty(pendinghistory)}">
+    <table>
+      <tr class="listRecord" th:each="entry, stat : ${pendinghistory} ">
+        <td>
+          <h4 th:text="${entry.key.name}">Name</h4>          
+          <div th:if="${#lists.isEmpty(entry.value)}">
+            <p>No Pending Leaves</p>
+          </div>
+          <div th:if="${not #lists.isEmpty(entry.value)}">
+            <table style="border: 1;">
+              <tr class="listHeading">
+                <th th:utext="#{fieldLabel.reference}">Reference</th>
+                <th th:utext="#{fieldLabel.staffId}">Id</th>
+                <th th:utext="#{fieldLabel.leaveType}">Leave</th>
+                <th th:utext="#{fieldLabel.startDate}">Start</th>
+                <th th:utext="#{fieldLabel.endDate}">End</th>
+               
+                <th th:utext="#{fieldLabel.status}">Status</th>
+                <th th:utext="#{title.leaveDetails}">Leave</th>
+              </tr>
+              <tr class="listRecord" th:each="leave : ${entry.value}">
+                <td th:text="${leave.leaveId}">Id</td>
+                <td th:text="${leave.staffId}">Staff</td>
+                <td th:text="${leave.leaveType.name}">Leave Type</td>
+                <td th:text="${leave.fromDate}">From</td>
+                <td th:text="${leave.toDate}">To</td>
+               
+                <td th:text="${leave.status}">Status</td>
+                <td><a th:href="@{/manager/leave/display/}+${leave.leaveId}"
+                    class="btn btn-default"><span th:text="#{caption.detail}"></span></a></td>
+              </tr>
+ 
+            </table>
+          </div>
+        </table>
+          </div>
+          <div>
+            <h3 th:utext="#{title.oPending}">Overtime History</h3>
+      
+   <div th:if="${not #lists.isEmpty(pendingOhistory)}">
+    <table>
+      <tr class="listRecord" th:each="entry, stat : ${pendingOhistory} ">
+        <td>
+          <h4 th:text="${entry.key.name}">Name</h4>          
+          <div th:if="${#lists.isEmpty(entry.value)}">
+            <p>No Pending Overtime Approvals</p>
+          </div>
+          <div th:if="${not #lists.isEmpty(entry.value)}">
+            <table style="border: 1;">
+              <tr class="listHeading">
+                <th th:utext="#{fieldLabel.otId}">Ot Id</th>
+                <th th:utext="#{fieldLabel.staffId}">Staff Id</th>
+                <th th:utext="#{fieldLabel.date}">Date</th>
+                <th th:utext="#{fieldLabel.hour}">Hours</th>
+                <th th:utext="#{fieldLabel.reason}">Reason</th>
+               
+                <th th:utext="#{fieldLabel.status}">Status</th>
+                <th th:utext="#{title.OtDetails}">Leave</th>
+              </tr>
+              <tr class="listRecord" th:each="otrecord : ${entry.value}">
+                <td th:text="${otrecord.otId}">Id</td>
+                <td th:text="${otrecord.staffId}">Staff</td>
+                <td th:text="${otrecord.otDate}">Leave Type</td>
+                <td th:text="${otrecord.otHour}">From</td>
+                <td th:text="${otrecord.reason}">To</td>
+               
+                <td th:text="${otrecord.status}">Status</td>
+                <td><a th:href="@{/manager/ot/display/}+${otrecord.otId}"
+                    class="btn btn-default"><span th:text="#{caption.detail}"></span></a></td>
+
+              </tr>
+            </table>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </table>
+  </div>
+</body>
+
+</html>

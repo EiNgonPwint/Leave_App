@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout.html :: html_head"/>
+
+<body>
+  <div th:replace="fragments/layout.html :: menu"/>
+  <div th:replace="fragments/layout.html :: header"/> 
+  <h3>Leave Types and Benifists page</h3>
+  <a th:href="@{/admin/manage/newleave}">Add New Leave Type</a>
+
+  <div th:if="${not #lists.isEmpty(some)}">
+    <table style="border: 1;">
+      <tr class="listHeading">
+        <th><span th:text="#{fieldLabel.leaveTypeId}"></span></th>
+        <th><span th:text="#{fieldLabel.leaveName}"></span></th>
+        <th><span th:text="#{fieldLabel.balance}"></span></th>
+        <th><span th:text="#{fieldLabel.isActive}"></span></th>
+        <th><span th:text="#{caption.edit}"></span></th>
+        <th><span th:text="#{caption.delete}"></span></th>
+      </tr>
+      <tr th:each="lts : ${some}" class="listRecord">
+        <td align="left" th:text="${lts.leaveTypeId}">Leave Type Id</td>
+        <td align="left" th:text="${lts.name}">Leave Type Name</td>
+        <td align="left" th:text="${lts.balance}">Balance</td>
+        <td align="left" th:text="${lts.isActive}">Active Record</td>
+        <td><a th:href="@{/admin/manage/edit/}+${lts.leaveTypeId}" class="btn btn-default"><span
+              th:text="#{caption.edit}"></span></a></td>
+        <td><a th:href="@{/admin/manage/delete/}+${lts.leaveTypeId}" class="btn btn-default">
+        <span th:if="${lts.isActive==true}" th:text="#{caption.delete}"></span>
+          <span th:if="${lts.isActive==false}" th:text="#{caption.reset}"></span>
+        </a></td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout.html :: html_head"/>
+
+<body>
+  <div th:replace="fragments/layout.html :: menu"/>
+  <div th:replace="fragments/layout.html :: header"/> 
+  <h3>Staff List page</h3>
+  <a th:href="@{/admin/staff/create}">Add Staff</a>
+
+  <div th:if="${not #lists.isEmpty(staffList)}">
+    <table style="border: 1;">
+      <tr class="listHeading">
+        <th><span th:text="#{fieldLabel.staffId}"></span></th>
+        <th><span th:text="#{fieldLabel.managerId}"></span></th>
+        <th><span th:text="#{fieldLabel.staffName}"></span></th>
+        <th><span th:text="#{fieldLabel.email}"></span></th>
+        <th><span th:text="#{caption.edit}"></span></th>
+        <th><span th:text="#{caption.delete}"></span></th>
+      </tr>
+      <tr th:each="staff : ${staffList}" class="listRecord">
+        <td align="left" th:text="${staff.staffId}">Staff Id</td>
+        <td align="left" th:text="${staff.managerId}">Manager Id</td>
+        <td align="left" th:text="${staff.name}">Name</td>
+        <td align="left" th:text="${staff.email}">Email</td>
+        <td><a th:href="@{/admin/staff/edit/}+${staff.staffId}" class="btn btn-default"><span
+              th:text="#{caption.edit}"></span></a></td>
+        <td><a th:href="@{/admin/staff/delete/}+${staff.staffId}" class="btn btn-default">
+        <span th:text="#{caption.delete}"></span>
+          </a></td>      
+      </tr>
+    </table>
+  </div>
+</body>
+</html>

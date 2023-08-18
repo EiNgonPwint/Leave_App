@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout.html :: html_head"/>
+<body onload="fun()">
+  <div th:replace="fragments/layout.html :: menu"/>
+  <div th:replace="fragments/layout.html :: header"/>   
+    <h3>New Leave Application Page</h3>
+  <form action="#" th:action="@{/staff/leave/create}"
+    th:object="${leave}" method="post">
+     <input type="hidden" th:field="*{staffId}" size="40" />
+    <table>
+      <tbody>
+        <tr>
+          <td><span th:text="#{fieldLabel.leaveType}"></span></td>
+          <td>
+				<select id="type" name="type" th:field="*{leaveType.leaveTypeId}" >
+					<option th:each="leaveType : ${leaveTypes}" th:value="${leaveType.leaveTypeId}" 
+						th:text="${leaveType.name}">leaveType
+					</option>
+				</select>
+		</td>
+        </tr>
+        <tr>
+          <td><span th:text="#{fieldLabel.startDate}"></span></td>
+          <td><input type="date" th:value="*{fromDate}" th:field="*{fromDate}"  /></td>
+          <td id="time1">
+          <fieldset>
+            <input name ="ampm1" id="am1" type="radio" th:field="*{fromDatePeriod}" th:value="AM"/>
+            <label th:text="AM"></label> &nbsp;&nbsp; <input name ="ampm1" id="pm1" type="radio"
+             th:field="*{fromDatePeriod}" th:value="PM" /> <label th:text="PM"></label> &nbsp;&nbsp;
+             <input name ="ampm1" id="allday" type="radio" th:field="*{fromDatePeriod}" th:value="FullDay" checked />
+             <label th:text="#{caption.fullday}"></label>
+          </fieldset></td>
+          <td th:if="${#fields.hasErrors('fromDate')}"
+            th:errors="*{fromDate}"></td>
+        </tr>
+        <tr>
+          <td><span th:text="#{fieldLabel.endDate}"></span></td>
+          <td><input type="date" th:value="*{toDate}" th:field="*{toDate}" /></td>
+          <td id="time2"><fieldset>
+            <input name ="ampm2" id="am2" type="radio" th:field="*{toDatePeriod}" th:value="AM"/>
+            <label th:text="AM"></label> &nbsp;&nbsp; <input name ="ampm2" id="pm2" type="radio"
+             th:field="*{toDatePeriod}" th:value="PM" /> <label th:text="PM"></label> &nbsp;&nbsp;
+              <input name ="ampm2" id="allday2" type="radio" th:field="*{toDatePeriod}" th:value="FullDay" checked />
+              <label th:text="#{caption.fullday}"></label>
+          </fieldset></td>
+          <td th:if="${#fields.hasErrors('toDate')}" th:errors="*{toDate}"></td>
+        </tr>
+         <tr>
+         <!-- <td hidden><span th:text="#{fieldLabel.duration}"></span></td> -->
+         <td></td>
+          <td hidden><input readonly disabled type="number" th:value="*{duration}" th:field="*{duration}" /></td>
+          <td th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}"></td>
+        
+        <tr>
+       	<tr>
+          <td><span th:text="#{fieldLabel.reason}"></span></td>
+          <td colspan="3"><textarea th:field="*{reason}"
+              th:rows="${reason}" cols="40"></textarea></td>
+        </tr>
+        <tr>
+          <td><span th:text="#{fieldLabel.work}"></span></td>
+          <td colspan="3"><textarea th:field="*{work}"
+              th:rows="${work}" cols="40"></textarea></td>
+        </tr>
+        <tr>
+          <td><span th:text="#{fieldLabel.contact}"></span></td>
+          <td colspan="3"><textarea th:field="*{contact}"
+              th:rows="${contact}" cols="40"></textarea></td>
+        </tr>  
+        <tr>
+          <td></td>
+          <td>
+            <input type="submit" value="Create" class="blcass" />
+            <input type="reset" value="Reset" class="blcass" />
+          </td>
+      </tbody>
+    </table>
+    
+  </form>
+</body>
+</html>
+
+
+
+
+
+<script>
+
+let selector = document.getElementById("type");
+let result1 = document.getElementById("time1");
+let result2 = document.getElementById("time2");
+let rbtn = document.getElementById("allday");
+let rbtn1 = document.getElementById("allday2");
+
+function fun(){
+
+  
+  rbtn.checked = true;
+  rbtn1.checked = true;
+  result1.style.visibility="hidden";
+  result2.style.visibility="hidden";
+
+ }
+
+  selector.addEventListener("change", () => {
+  // if value switched by client
+  
+    if(selector.value!=3){
+    
+      rbtn.checked = true;
+      rbtn1.checked = true;
+      result1.style.visibility="hidden";
+      result2.style.visibility="hidden";
+
+  }
+  else{
+    result1.style.visibility="visible";
+    result2.style.visibility="visible";
+  }
+  });
+ 
+</script>

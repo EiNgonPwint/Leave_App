@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
+
+  <link rel="stylesheet" type="text/css" th:href="@{/css/navbar.css}" />
+  <!-- <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" /> -->
+  <!-- <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" /> -->
+
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+    integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+  <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</head>
+
+<body>
+    <div th:fragment="menu" id="menu">
+    
+        <!-- Navigation -->
+        <nav class="navbar" >
+          <a th:href="@{/about}" >Leave Application System - LAPS</a>
+          <a th:href="@{/home}" >Home</a>
+          <a th:href="@{/about}">About</a>
+          <div th:if="${session.usession?.user}">
+            <div th:each="role : ${session.usession.user.roleSet}">
+              <div th:if="${role.roleId == 'manager'}">
+                <div class="subnav">
+                  <button class="subnavbtn">Manager Menu <i class="fa fa-caret-down"></i></button>
+                  <div class="subnav-content">
+                    <a th:href="@{/manager/pending}" th:utext="#{menu.leavesForApproval}">Pending Approvals</a>
+                    <a th:href="@{/manager/subordinates-history}" th:utext="#{menu.subordinateHistory}">Subordinates History</a>
+                  </div>
+                </div>
+              </div>
+              
+              <div th:if="${role.roleId == 'admin'}">
+                <div class="subnav">
+                  <button class="subnavbtn">Admin Menu <i class="fa fa-caret-down"></i></button>
+                  <div class="subnav-content">
+                    <a th:href="@{/admin/role/list}" th:utext="#{menu.admin.rlist}">Roles</a>
+                    <a th:href="@{/admin/staff/list}" th:utext="#{menu.admin.slist}">Staffs</a>
+                    <a th:href="@{/admin/user/list}" th:utext="#{menu.admin.ulist}">Users</a>
+                    <a th:href="@{/admin/manage/leave}" th:utext="#{menu.admin.lvblist}">Leaves</a>
+                  </div>
+                </div>
+              </div>
+          
+              <div th:if="${role.roleId == 'staff'}">
+                <div class="subnav">
+                  <button class="subnavbtn">Staff Menu <i class="fa fa-caret-down"></i></button>
+                  <div class="subnav-content">
+                    <a th:href="@{/staff/leave/history}" th:utext="#{menu.personalHistory}">History</a>
+                    <a th:href="@{/staff/leave/create}" th:utext="#{menu.leaveSubmit}">Apply</a>
+                    <a th:href="@{/staff/leave/view}" th:utext="#{menu.allLeave}">View All Leaves</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <a th:href="@{/logout}" th:utext="#{menu.logout}">Logout</a>
+            
+          </div>
+          
+        </nav>
+      </div>
+    <h2>Your Leave History</h2>
+  <div>
+    <form th:action="@{/staff/leave/history}" id="searchForm">
+      <div class="row d-flex">
+        <div class="col-md-3 input-group mt-2">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="pageSize" style="font-family : calbiri;font-size : 15pt;">Show  </label>
+
+          <select form="searchForm" name="size" th:value="${pageSize}" onchange="changePageSize()" class="size-select"
+            id="pageSize">
+            <option th:each="s : ${ {5, 10, 25, 50, 100} }" th:value="${s}" th:text="${s}" th:selected="${s == pageSize}"></option>
+          </select>
+          <label style="font-family : calbiri;font-size : 15pt;">entries</label>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  
+  <!-- sortable Table and Pagination Bar -->
+  <br>
+  <br>
+
+  <div th:unless="${#lists.isEmpty(lvhistory)}">
+    <table class="table table-hover table-responsive-xl">
+      <thead class="thead-light">
+        <tr>
+          <th th:replace="fragments/sorting :: sorting('leaveId','Leave Id')"></th>
+          <th th:replace="fragments/sorting :: sorting('staffId','Staff Id')"></th>
+          <th th:replace="fragments/sorting :: sorting('leaveType','Leave Type')"></th>
+          <th th:replace="fragments/sorting :: sorting('fromDate','From Date')"></th>
+          <th th:replace="fragments/sorting :: sorting('toDate','To Date')"></th>
+          <th th:replace="fragments/sorting :: sorting('status','Status')"></th>
+          <!-- <th th:replace="fragments/sorting :: sorting('update','Update')"></th>
+          <th th:replace="fragments/sorting :: sorting('delete','Delete')"></th>
+          <th th:replace="fragments/sorting :: sorting('leaveDetails','Leave Details')"></th> -->
+          <th><span th:text="#{fieldLabel.update}"></span></th>
+          <th><span th:text="#{fieldLabel.delete}"></span></th>
+          <th th:utext="#{title.leaveDetails}"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="leave : ${lvhistory}">
+          <td>[[${leave.leaveId}]]</td>
+          <td>[[${leave.staffId}]]</td>
+          <td>[[${leave.leaveType.name}]]</td>
+          <td>[[${#temporals.format(leave.fromDate, 'yyyy-MM-dd')}]]</td>
+          <td>[[${#temporals.format(leave.toDate, 'yyyy-MM-dd')}]]</td>
+          <td>[[${leave.status}]]</td>
+          <td><div th:if="${#strings.equals(leave.status, 'APPLIED')  or #strings.equals(leave.status,'UPDATED')}">
+              <a th:href="@{/staff/leave/edit/}+${leave.leaveId}">Update</a></div></td>
+          <td><div th:if="${#strings.equals(leave.status, 'APPLIED')  or #strings.equals(leave.status,'UPDATED')}">
+                  <a th:href="@{/staff/leave/delete/}+${leave.leaveId}">Delete</a></div>
+                <div th:if="${#strings.equals(leave.status, 'APPROVED') and leave.getFromDate().isAfter(now)}" >
+                  <a th:href="@{/staff/leave/delete/}+${leave.leaveId}">Cancel</a></div></td>
+          <td><a th:href="@{/staff/leave/details/}+${leave.leaveId}"class="btn btn-default"><span th:text="#{caption.detail}"></span></a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="" th:if="${#lists.isEmpty(lvhistory)}">
+    <span>You have no leaves. Start applying a new one.</span>
+  </div>
+  <br>
+  <br>
+  <nav aria-label="Pagination" th:if="${totalPages > 0}">
+    <ul class="pagination">
+      <div class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+        <a th:replace="fragments/paging :: paging(1, '<<', 'First Page')"></a>
+      </div>
+      <div class="page-item font-weight-bold" th:classappend="${currentPage == 1} ? 'disabled'">
+        <a th:replace="fragments/paging :: paging(${currentPage - 1}, 'Prev', 'Previous Page')"></a>
+      </div>
+      <div class="page-item disabled" th:if="${currentPage - 2 > 1}">
+        <a class="page-link" href="#">...</a>
+      </div>
+      <div class="page-item" th:classappend="${page == currentPage} ? 'active'"
+        th:each="page : ${#numbers.sequence(currentPage > 2 ? currentPage - 2 : 1, currentPage + 2 < totalPages ? currentPage + 2 : totalPages)}">
+        <a th:replace="fragments/paging :: paging(${page}, ${page}, 'Page ' + ${page})"></a>
+    </div>
+      <div class="page-item disabled" th:if="${currentPage + 2 < totalPages}">
+        <a class="page-link" href="#">...</a>
+      </div>
+      <div class="page-item font-weight-bold" th:classappend="${currentPage == totalPages} ? 'disabled'">
+        <a th:replace="fragments/paging :: paging(${currentPage + 1},'Next', 'Next Page')"></a>
+      </div>
+      <div class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+        <a th:replace="fragments/paging :: paging(${totalPages}, '>>', 'Last Page')"></a>
+      </div>
+    </ul>
+  </nav>
+</body>
+
+</html>
+
+<script type="text/javascript">
+  
+    function changePageSize() {
+      $("#searchForm").submit();
+    }
+</script>

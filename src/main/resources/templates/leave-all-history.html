@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout.html :: html_head"/>
+<body>
+  <div th:replace="fragments/layout.html :: menu"/>
+  <div th:replace="fragments/layout.html :: header"/> 
+  <h2>All Leave History</h2>
+  
+  
+  <table>
+  <tr>
+  <td>
+    <a th:href="@{/staff/leave/view/0}">Previous Month</a></td>
+    <td><p th:text="${currentMonth}" style="color:blue;font-size:18px;"></p></td>
+    <td><a th:href="@{/staff/leave/view/1}">Next Month</a></td>
+  </tr>
+  </table>
+  
+
+  <div th:if="${not #lists.isEmpty(staffLeaves)}">
+    <table style=" border: 1;">
+      <tr class="listHeading">
+        <th><span th:text="#{fieldLabel.reference}"></span></th>
+        <th><span th:text="#{fieldLabel.staffId}"></span></th>
+        <th><span th:text="#{fieldLabel.leaveType}"></span></th>
+        <th><span th:text="#{fieldLabel.startDate}"></span></th>
+        <th><span th:text="#{fieldLabel.endDate}"></span></th>
+      
+        <th><span th:text="#{fieldLabel.status}"></span></th>
+      </tr>
+      <tr th:each="leave : ${staffLeaves}" class="listRecord">
+        <td align="left" th:text="${leave.leaveId}">Id</td>
+        <td align="left" th:text="${leave.staffId}">Staff</td>
+        <td align="left" th:text="${leave.leaveType.name}">Leave Type</td>
+        <td align="left" th:text="${#temporals.format(leave.fromDate, 'yyyy-MM-dd')}">From</td>
+        <td align="left" th:text="${#temporals.format(leave.toDate, 'yyyy-MM-dd')}">To</td>
+        
+        <td align="left" th:text="${leave.status}">Status</td>
+        
+<!--        <td>-->
+<!--          <div-->
+<!--            th:if="${#strings.equals(leave.status, 'APPLIED')  or #strings.equals(leave.status,'UPDATED')}">-->
+<!--            <a th:href="@{/staff/leave/edit/}+${leave.leaveId}">Update</a>-->
+<!--          </div>-->
+<!--        </td>-->
+<!--        <td>-->
+<!--          <div-->
+<!--            th:if="${#strings.equals(leave.status, 'APPLIED')  or #strings.equals(leave.status,'UPDATED')}">-->
+<!--            <a th:href="@{/staff/leave/delete/}+${leave.leaveId}">Delete</a>-->
+<!--          </div>-->
+<!--          <div-->
+<!--            th:if="${#strings.equals(leave.status, 'APPROVED')}">-->
+<!--            <a th:href="@{/staff/leave/delete/}+${leave.leaveId}">Cancel</a>-->
+<!--          </div>-->
+<!--        </td>-->
+<!--        <td><a th:href="@{/staff/leave/details/}+${leave.leaveId}"-->
+<!--                    class="btn btn-default"><span th:text="#{caption.detail}"></span></a></td>-->
+      </tr>
+    </table>
+  </div>
+  <div th:if="${#lists.isEmpty(staffLeaves)}">
+    <p>No Records Found!</p>
+  </div>
+</body>
+
+</html>

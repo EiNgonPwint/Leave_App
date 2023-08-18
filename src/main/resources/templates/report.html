@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout.html :: html_head"/>
+<body>
+  <div th:replace="fragments/layout.html :: menu"/>
+  <div th:replace="fragments/layout.html :: header"/> 
+  <h2>Leave Report</h2>
+  
+  
+  <table>
+  </table>
+  
+
+  <form action="#" th:action="@{/manager/download/lvreport}"
+    th:object="${leave}" method="post">
+     
+    <table>
+      <tbody>
+        <tr>
+          <td><span th:text="#{fieldLabel.leaveType}"></span></td>
+          <td>
+				<select id="type" name="type" th:field="*{leaveType.leaveTypeId}" >
+					<option th:each="leaveType : ${leaveTypes}" th:value="${leaveType.leaveTypeId}" 
+						th:text="${leaveType.name}">leaveType
+					</option>
+				</select>
+		</td>
+        </tr>
+        <tr>
+          <td><span th:text="#{fieldLabel.startDate}"></span></td>
+          <td><input type="date" th:value="*{fromDate}" th:field="*{fromDate}"  /></td>
+          <td id="time1">
+          <td th:if="${#fields.hasErrors('fromDate')}"
+            th:errors="*{fromDate}"></td>
+        </tr>
+        <tr>
+          <td><span th:text="#{fieldLabel.endDate}"></span></td>
+          <td><input type="date" th:value="*{toDate}" th:field="*{toDate}" /></td>
+          <td th:if="${#fields.hasErrors('toDate')}" th:errors="*{toDate}"></td>
+        </tr>
+        <tr>
+         <td>
+            <input type="submit" value="Display" class="blcass" />
+     
+          </td>
+          
+          <td>
+          <input type="submit" value="Download Csv" th:formaction="@{/manager/download/leaves.csv}" class="blcass" />
+          </td>
+        </tr>
+        </tbody>
+    </table>
+    
+  </form>
+</body>
+
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout.html :: html_head"/>
+
+<body>
+  <div th:replace="fragments/layout.html :: menu"/>
+  <div th:replace="fragments/layout.html :: header"/> 
+  <h3>Edit Staff Page</h3>
+  <form action="#" th:action="@{/admin/manage/edit/}+${leaveType.leaveTypeId}" th:object="${leaveType}" method="post">
+    <table>
+      <tbody>
+        <tr>
+          <td><span th:text="#{fieldLabel.leaveTypeId}"></span></td>
+          <td>
+            <fieldset><input type="text" th:field="*{leaveTypeId}" readonly="readonly" /></fieldset>
+          </td>
+          <td th:if="${#fields.hasErrors('leaveTypeId')}" th:errors="*{leaveTypeId}"></td>
+        </tr>
+        <tr>
+          <td><span th:text="#{fieldLabel.leaveTypeName}"></span></td>
+          <td>
+            <fieldset><input type="text" th:field="*{name}" /></fieldset>
+          </td>
+          <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></td>
+        </tr>
+        <tr>
+          <td><span th:text="#{fieldLabel.balance}"></span></td>
+          <td>
+            <fieldset><input type="text" th:field="*{balance}" /></fieldset>
+          </td>
+          <td th:if="${#fields.hasErrors('balance')}" th:errors="*{balance}"></td>
+        </tr>
+        <tr>
+          <td>
+            <fieldset><input type="submit" value="Update" class="blcass" /></fieldset>
+          </td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+
+</body>
+
+</html>

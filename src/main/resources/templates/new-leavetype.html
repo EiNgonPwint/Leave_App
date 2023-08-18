@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout.html :: html_head"/>
+
+<body>
+  <div th:replace="fragments/layout.html :: menu"/>
+  <div th:replace="fragments/layout.html :: header"/> 
+  <h3>New Leave Type Page</h3>
+
+  <form action="#" th:action="@{'/admin/manage/newleave'}" th:object="${leaveType}" method="post">
+    <table>
+      <tbody>
+        <tr>
+          <td hidden><span th:text="#{fieldLabel.leaveTypeId}"></span></td>
+          <td>
+              <input type="hidden" th:field="*{leaveTypeId}"/>
+          </td>
+           <td th:if="${#fields.hasErrors('leaveTypeId')}" th:errors="*{leaveTypeId}"></td>
+        </tr>
+        <tr>
+          <td><span th:text="#{fieldLabel.leaveTypeName}"></span></td>
+          <td>
+            
+              <input type="text" th:field="*{name}" />
+            
+          </td>
+          <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></td>
+        </tr>
+        <tr>
+          <td><span th:text="#{fieldLabel.balance}"></span></td>
+          <td>
+            
+              <input type="text" th:field="*{balance}" />
+           
+          </td>
+          <td th:if="${#fields.hasErrors('balance')}" th:errors="*{balance}"></td>
+        </tr>
+        
+        <tr>
+          <td>
+              <input type="submit" value="Create" class="blcass" /> 
+          </td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+
+</body>
+
+</html>
